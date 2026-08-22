@@ -29,6 +29,14 @@ export function Connect() {
     );
   }, []);
 
+  // WalletConnect is the best phone option when it is configured: it deep-links
+  // into whichever wallet app the player already has. Only fall back to the
+  // MetaMask-specific link when it is not available.
+  const walletConnect = useMemo(
+    () => connectors.find((c) => c.id === "walletConnect"),
+    [connectors],
+  );
+
   // Named wallets come from EIP-6963 discovery. Drop the generic fallback when
   // at least one real wallet announced itself, so nobody has to guess what
   // "Injected" means.
@@ -70,13 +78,37 @@ export function Connect() {
 
       {isMobile ? (
         <div className="space-y-4">
-          <p className="text-white/75 text-sm max-w-sm mx-auto">
-            Phone browsers can&apos;t reach a wallet directly. Open this page
-            inside your wallet&apos;s browser.
-          </p>
+          {walletConnect ? (
+            <>
+              <button
+                type="button"
+                disabled={isPending}
+                onClick={() => connect({ connector: walletConnect })}
+                className="w-full max-w-xs mx-auto block rounded-xl bg-[var(--gold)] text-[#2a1a14] px-7 py-4 font-bold text-lg hover:brightness-110 transition shadow disabled:opacity-50"
+              >
+                {isPending && variables?.connector === walletConnect
+                  ? "check your wallet…"
+                  : "Connect wallet"}
+              </button>
+              <p className="text-white/50 text-xs max-w-xs mx-auto">
+                Opens whichever wallet app you already have.
+              </p>
+              <div className="pt-2 text-white/40 text-xs">or</div>
+            </>
+          ) : (
+            <p className="text-white/75 text-sm max-w-sm mx-auto">
+              Phone browsers can&apos;t reach a wallet directly. Open this page
+              inside your wallet&apos;s browser.
+            </p>
+          )}
           <a
             href={`https://metamask.app.link/dapp/${host}`}
-            className="inline-block rounded-xl bg-[var(--gold)] text-[#2a1a14] px-7 py-3 font-bold hover:brightness-110 transition shadow"
+            className={[
+              "inline-block rounded-xl px-7 py-3 font-bold transition",
+              walletConnect
+                ? "bg-white/10 text-white hover:bg-white/20"
+                : "bg-[var(--gold)] text-[#2a1a14] hover:brightness-110 shadow",
+            ].join(" ")}
           >
             Open in MetaMask
           </a>
