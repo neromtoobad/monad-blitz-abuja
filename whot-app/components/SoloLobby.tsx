@@ -162,14 +162,17 @@ export function SoloLobby({
         </p>
       )}
 
-      <div className="border-t border-[var(--ink)]/10 pt-5 text-center">
+      <div className="border-t border-[var(--ink)]/10 pt-6">
         <button
           type="button"
           onClick={onMultiplayer}
-          className="text-sm underline text-[var(--ink)]/55 hover:text-[var(--ink)]"
+          className="w-full rounded-xl border-2 border-[var(--ink)]/20 bg-[var(--card)] px-6 py-4 font-bold text-[var(--ink)] hover:border-[var(--gold)] transition"
         >
-          or play a table with friends
+          Play against people instead
         </button>
+        <p className="mt-2 text-center text-xs text-[var(--ink)]/50">
+          2 to 4 players, any devices. You get a link to send them.
+        </p>
       </div>
     </div>
   );

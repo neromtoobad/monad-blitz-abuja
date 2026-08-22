@@ -39,6 +39,15 @@ export function Table({ gameId }: { gameId: bigint }) {
   const [txHash, setTxHash] = useState<`0x${string}` | undefined>();
   const [isPending, setIsPending] = useState(false);
   const [sendError, setSendError] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+  // The game id lives in the URL hash, so the current address is the invite.
+  const [inviteUrl, setInviteUrl] = useState("");
+
+  useEffect(() => {
+    setInviteUrl(
+      `${window.location.origin}${window.location.pathname}#${gameId}`,
+    );
+  }, [gameId]);
 
   useEffect(() => {
     setAddress(sessionAddress());
@@ -202,10 +211,31 @@ export function Table({ gameId }: { gameId: bigint }) {
               </Btn>
             )}
           </div>
-          <p className="mt-4 text-sm text-neutral-500">
-            Share game <span className="font-mono">#{String(gameId)}</span> so
-            others can join.
-          </p>
+          <div className="mt-6 border-t border-[var(--ink)]/10 pt-5">
+            <div className="text-xs uppercase tracking-[0.16em] text-[var(--ink)]/50 mb-2">
+              Invite players
+            </div>
+            <div className="flex flex-wrap items-center gap-2">
+              <code className="font-mono text-sm bg-[var(--ink)]/[0.06] rounded-lg px-3 py-2 text-[var(--ink)] break-all">
+                {inviteUrl}
+              </code>
+              <button
+                type="button"
+                onClick={() => {
+                  navigator.clipboard?.writeText(inviteUrl);
+                  setCopied(true);
+                  setTimeout(() => setCopied(false), 1800);
+                }}
+                className="rounded-xl bg-[var(--ink)] text-[var(--cream)] px-5 py-2.5 font-bold hover:bg-[var(--ink-soft)] transition"
+              >
+                {copied ? "copied!" : "Copy invite link"}
+              </button>
+            </div>
+            <p className="mt-3 text-sm text-[var(--ink)]/55">
+              Send it to anyone. The link opens this exact table on their
+              device, whatever they are on.
+            </p>
+          </div>
         </div>
       </div>
     );
