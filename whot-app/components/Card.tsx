@@ -50,12 +50,16 @@ export function Card({
   disabled,
   selected,
   small,
+  className,
+  style,
 }: {
   card: number;
   onClick?: () => void;
   disabled?: boolean;
   selected?: boolean;
   small?: boolean;
+  className?: string;
+  style?: React.CSSProperties;
 }) {
   const shape = shapeOf(card);
   const num = numberOf(card);
@@ -71,7 +75,9 @@ export function Card({
       onClick={onClick}
       disabled={disabled || !interactive}
       aria-label={whot ? "Whot 20" : `${num}`}
+      style={style}
       className={[
+        className ?? "",
         w,
         "whot-card relative shrink-0 rounded-[0.6rem] transition-transform duration-150",
         "flex items-center justify-center",

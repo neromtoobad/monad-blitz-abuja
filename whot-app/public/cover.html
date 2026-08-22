@@ -1,0 +1,39 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{width:1200px;height:630px;overflow:hidden;
+    background:#1d4436;
+    background-image:radial-gradient(ellipse at 50% 0%,rgba(255,255,255,.09),transparent 62%),
+      repeating-linear-gradient(45deg,rgba(0,0,0,.05) 0 2px,transparent 2px 4px);
+    font-family:Inter,system-ui,sans-serif;color:#f7f1e1;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;padding-bottom:150px}
+  .wordmark{width:470px;filter:brightness(0) invert(1);opacity:.97}
+  .rule{width:340px;height:1px;margin:22px 0 18px;
+    background:linear-gradient(90deg,transparent,#c9a227 18%,#c9a227 82%,transparent)}
+  .tag{font-size:26px;letter-spacing:.01em;color:rgba(255,255,255,.8)}
+  .sub{margin-top:10px;font-size:17px;color:rgba(255,255,255,.5);letter-spacing:.06em;text-transform:uppercase}
+  .cards{position:absolute;bottom:-58px;display:flex;gap:16px;left:50%;transform:translateX(-50%)}
+  .card{width:132px;height:190px;background:#fbf7ec;border-radius:12px;
+    border:1px solid rgba(123,18,32,.18);box-shadow:0 6px 22px rgba(0,0,0,.35);
+    display:flex;align-items:center;justify-content:center;position:relative}
+  .card img{width:78px;height:78px}
+  .n{position:absolute;top:8px;left:12px;font-family:'Playfair Display',serif;
+    font-weight:700;font-size:26px;color:#7b1220}
+  .n.b{top:auto;left:auto;bottom:8px;right:12px;transform:rotate(180deg)}
+  .w{font-family:'Playfair Display',serif;font-style:italic;font-size:34px;color:#7b1220}
+  .r{transform:rotate(-9deg)}.r2{transform:rotate(5deg)}.r3{transform:rotate(-3deg)}
+  .r4{transform:rotate(8deg)}.r5{transform:rotate(-6deg)}
+</style></head><body>
+  <img class="wordmark" src="/whot/wordmark.png">
+  <div class="rule"></div>
+  <div class="tag">Nigerian Whot, fully onchain on Monad</div>
+  <div class="sub">Every card played is a transaction</div>
+  <div class="cards">
+    <div class="card r"><span class="n">12</span><img src="/whot/circle.png"><span class="n b">12</span></div>
+    <div class="card r2"><span class="n">5</span><img src="/whot/triangle.png"><span class="n b">5</span></div>
+    <div class="card r3"><span class="n">20</span><span class="w">Whot</span><span class="n b">20</span></div>
+    <div class="card r4"><span class="n">2</span><img src="/whot/cross.png"><span class="n b">2</span></div>
+    <div class="card r5"><span class="n">8</span><img src="/whot/star.png"><span class="n b">8</span></div>
+  </div>
+</body></html>

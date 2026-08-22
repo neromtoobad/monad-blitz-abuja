@@ -336,7 +336,9 @@ export function Table({ gameId }: { gameId: bigint }) {
           <div className="text-[0.65rem] uppercase tracking-[0.18em] text-white/55 mb-2">
             Top card
           </div>
-          <Card card={g.topCard} />
+          <div key={`${g.topCard}-${String(g.lastMoveBlock)}`} className="card-land">
+            <Card card={g.topCard} />
+          </div>
           <div className="mt-2 text-sm font-bold text-white/85">{cardName(g.topCard)}</div>
         </div>
 
@@ -456,6 +458,8 @@ export function Table({ gameId }: { gameId: bigint }) {
             return (
               <Card
                 key={`${c}-${i}`}
+                className="card-deal"
+                style={{ animationDelay: `${i * 28}ms` }}
                 card={c}
                 selected={picked === i}
                 disabled={!isMyTurn || !ok}

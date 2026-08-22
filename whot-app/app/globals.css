@@ -65,3 +65,22 @@ body {
     transparent
   );
 }
+
+/* A played card should visibly land, so the house's reply reads as a move
+   rather than the top card silently changing. */
+@keyframes land {
+  0%   { transform: translateY(-38px) rotate(-11deg) scale(1.12); opacity: 0; }
+  60%  { transform: translateY(3px) rotate(2deg) scale(1.02); opacity: 1; }
+  100% { transform: translateY(0) rotate(0) scale(1); opacity: 1; }
+}
+.card-land { animation: land 340ms cubic-bezier(.2,.9,.3,1.2) both; }
+
+@keyframes dealin {
+  from { transform: translateY(14px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+.card-deal { animation: dealin 260ms ease-out both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .card-land, .card-deal { animation: none; }
+}
