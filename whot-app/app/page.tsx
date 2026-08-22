@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import {
   useAccount,
-  useConnect,
   useDisconnect,
   useSwitchChain,
 } from "wagmi";
+import { Connect } from "@/components/Connect";
 import { Lobby } from "@/components/Lobby";
 import { SoloLobby } from "@/components/SoloLobby";
 import { Table } from "@/components/Table";
@@ -16,7 +16,6 @@ import { monadTestnet } from "@/lib/chain";
 
 export default function Home() {
   const { address, chainId } = useAccount();
-  const { connect, connectors } = useConnect();
   const { disconnect } = useDisconnect();
   const { switchChain, isPending: switching, error: switchError } = useSwitchChain();
 
@@ -50,30 +49,7 @@ export default function Home() {
   if (!address) {
     return (
       <Shell>
-        <div className="felt rounded-2xl p-12 text-center border border-black/20">
-          <Image
-            src="/whot/wordmark.png"
-            alt="Whot"
-            width={720}
-            height={345}
-            priority
-            className="mx-auto w-64 h-auto brightness-0 invert opacity-95"
-          />
-          <div className="gold-rule h-px w-44 mx-auto my-4" />
-          <p className="text-white/65 mb-7">
-            Nigerian Whot on Monad. Every card is a transaction.
-          </p>
-          {connectors.map((c) => (
-            <button
-              key={c.uid}
-              type="button"
-              onClick={() => connect({ connector: c })}
-              className="rounded-xl bg-[var(--gold)] text-[#2a1a14] px-7 py-3 font-bold hover:brightness-110 transition mr-2 shadow"
-            >
-              Connect {c.name}
-            </button>
-          ))}
-        </div>
+        <Connect />
       </Shell>
     );
   }
