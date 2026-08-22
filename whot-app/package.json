@@ -1,0 +1,28 @@
+{
+  "name": "whot-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "abi": "node -e \"const fs=require('fs');const a=require('../whot-onchain/out/Whot.sol/Whot.json');fs.writeFileSync('lib/whotAbi.ts','export const whotAbi = '+JSON.stringify(a.abi,null,2)+' as const;\n')\"",
+    "seed": "node scripts/buildindex.mjs"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.101.4",
+    "next": "16.3.2",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "viem": "^2.55.19",
+    "wagmi": "^3.7.6"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+/* Palette taken from the classic Waddingtons Nigerian Whot deck: oxblood ink
+   on cream stock, gold ornament, deep green baize. The app commits to this
+   light-on-felt look rather than inheriting the viewer's dark mode. */
+:root {
+  --ink: #7b1220;
+  --ink-soft: #9c2a38;
+  --gold: #c9a227;
+  --cream: #f7f1e1;
+  --card: #fbf7ec;
+  --felt: #1d4436;
+  --felt-dark: #143026;
+  --background: #f2ece0;
+  --foreground: #2a1a14;
+}
+
+@theme inline {
+  --font-serif: var(--font-serif);
+  --font-sans: var(--font-sans);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-ink: var(--ink);
+  --color-gold: var(--gold);
+  --color-cream: var(--cream);
+  --color-felt: var(--felt);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+/* Cream card stock with a soft gold edge and a real drop shadow. */
+.whot-card {
+  background: var(--card);
+  border: 1px solid rgba(123, 18, 32, 0.18);
+  box-shadow:
+    0 1px 2px rgba(20, 10, 6, 0.16),
+    0 6px 14px rgba(20, 10, 6, 0.12);
+}
+
+/* Green baize with a subtle woven texture, so the table reads as a table. */
+.felt {
+  background-color: var(--felt);
+  background-image:
+    radial-gradient(
+      ellipse at 50% 0%,
+      rgba(255, 255, 255, 0.07),
+      transparent 62%
+    ),
+    repeating-linear-gradient(
+      45deg,
+      rgba(0, 0, 0, 0.05) 0 2px,
+      transparent 2px 4px
+    );
+}
+
+.gold-rule {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--gold) 18%,
+    var(--gold) 82%,
+    transparent
+  );
+}
