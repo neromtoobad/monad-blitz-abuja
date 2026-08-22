@@ -6,6 +6,8 @@ Built at Monad Blitz Abuja, 22 August 2026.
 
 Contract: [`0x8B3bd77d873C7283dC3Af984daDEa4CecA22DEf8`](https://testnet.monadexplorer.com/address/0x8B3bd77d873C7283dC3Af984daDEa4CecA22DEf8) on Monad Testnet (chain 10143)
 
+**Play it: https://whot-app.vercel.app**
+
 ---
 
 ## Why this needs Monad
