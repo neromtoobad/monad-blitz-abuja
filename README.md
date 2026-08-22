@@ -37,6 +37,63 @@ A draw returns your stake exactly.
 
 **Table** — 2 to 4 players, open lobby, shareable game id.
 
+## Proof on chain
+
+Everything below is a real transaction on Monad Testnet (chain 10143). Nothing
+here is simulated — paste any hash into
+[testnet.monadexplorer.com](https://testnet.monadexplorer.com).
+
+**Contract deployment** — [`0x694a094f…6c75ee`](https://testnet.monadexplorer.com/tx/0x694a094fb5a04cf558375ff0ced1328afa3cfa111ef0cabb6fcd6502ca6c75ee)
+at block 55,942,788.
+
+### The claim, and the transaction that proves it
+
+**"The opponent is the contract, and it moves inside your transaction."**
+
+[`0xd3346566…455afd`](https://testnet.monadexplorer.com/tx/0xd3346566960a1108a23609d0720f35bc45dc813db2767bbe0472633481455afd)
+— block 55,943,845. One transaction, two `CardPlayed` events:
+
+| | |
+|---|---|
+| player | played Whot 20 |
+| **the contract** | played Star 8 |
+
+The house's reply is not a second transaction from a bot wallet. It is the same
+transaction, emitted by `address(this)` taking the second seat.
+
+**"You stake, the house matches, winner takes the pot."**
+
+[`0x12c92f64…22c57f9`](https://testnet.monadexplorer.com/tx/0x12c92f64d84c63c426c3a3694b186233f322be259f8c26c77c177c10f22c57f9)
+— `GameWon` and `SoloSettled` in a single transaction, paying out **0.2 MON**.
+Winning the game and being paid for it are atomic; there is no settlement step
+to trust.
+
+**"Every card played is a transaction."**
+
+[`0xe147d383…c55d6e`](https://testnet.monadexplorer.com/tx/0xe147d38303fc966f27fc00d7b8fe3c28e728bfe98bdbc79f460d2a86f5c55d6e)
+— a solo game opening: stake escrowed, deck shuffled, hands dealt, opening card
+flipped. Five events, one transaction.
+
+### Totals so far
+
+| | |
+|---|---|
+| Games dealt | 10 |
+| Cards played on chain | 201 |
+| Contract events emitted | 399 |
+| Median move latency | ~1.1s |
+| Gas per move (solo) | ~130k |
+
+Read them yourself:
+
+```bash
+cast logs --address 0x8B3bd77d873C7283dC3Af984daDEa4CecA22DEf8 \
+  --from-block 55942788 --rpc-url https://testnet-rpc.monad.xyz
+```
+
+Or open `/feed` and `/stats` in the live app — both are built entirely from
+these events, with no database behind them.
+
 ## Rules (Set A, the main Nigerian table)
 
 54 cards. No 6s, no 9s.
