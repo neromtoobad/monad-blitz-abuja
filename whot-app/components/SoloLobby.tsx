@@ -3,13 +3,10 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { formatEther, parseEther, parseEventLogs } from "viem";
-import {
-  useReadContract,
-  useWaitForTransactionReceipt,
-  useWriteContract,
-} from "wagmi";
+import { useReadContract, useWaitForTransactionReceipt } from "wagmi";
 import { WHOT_ADDRESS, whotAbi } from "@/lib/whot";
 import { rememberWager } from "@/lib/solo";
+import { sessionSend } from "@/lib/session";
 
 const STAKES = ["0.001", "0.01", "0.1"] as const;
 
@@ -21,7 +18,9 @@ export function SoloLobby({
   onMultiplayer: () => void;
 }) {
   const [stake, setStake] = useState<string>("0.01");
-  const { writeContract, data: hash, isPending, error } = useWriteContract();
+  const [hash, setHash] = useState<`0x${string}` | undefined>();
+  const [isPending, setIsPending] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
   const receipt = useWaitForTransactionReceipt({ hash });
 
   const bankroll = useReadContract({
@@ -130,15 +129,27 @@ export function SoloLobby({
         <button
           type="button"
           disabled={busy || wei === 0n}
-          onClick={() =>
-            writeContract({
-              abi: whotAbi,
-              address: WHOT_ADDRESS,
-              functionName: "createSoloGame",
-              args: [],
-              value: wei,
-            })
-          }
+          onClick={async () => {
+            // Staked and played by the session wallet, so winnings land there
+            // too and can be swept back with the Cash out button.
+            setIsPending(true);
+            setError(null);
+            try {
+              setHash(
+                await sessionSend(
+                  WHOT_ADDRESS,
+                  whotAbi,
+                  "createSoloGame",
+                  [],
+                  wei,
+                ),
+              );
+            } catch (e) {
+              setError(e as Error);
+            } finally {
+              setIsPending(false);
+            }
+          }}
           className="w-full rounded-xl bg-[var(--ink)] text-[var(--cream)] px-6 py-4 font-bold text-lg hover:bg-[var(--ink-soft)] shadow transition disabled:opacity-40"
         >
           {busy ? "dealing…" : `Play for ${stake} MON`}

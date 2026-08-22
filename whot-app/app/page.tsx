@@ -8,6 +8,7 @@ import {
   useSwitchChain,
 } from "wagmi";
 import { Connect } from "@/components/Connect";
+import { SessionBar } from "@/components/SessionBar";
 import { Lobby } from "@/components/Lobby";
 import { SoloLobby } from "@/components/SoloLobby";
 import { Table } from "@/components/Table";
@@ -22,6 +23,7 @@ export default function Home() {
   const [gameId, setGameId] = useState<bigint | null>(null);
   // Solo is the front door; the multiplayer lobby sits behind a link.
   const [mode, setMode] = useState<"solo" | "table">("solo");
+  const [, setSessionReady] = useState(false);
 
   // Keep the table in the URL hash so a game is shareable by link.
   useEffect(() => {
@@ -100,6 +102,8 @@ export default function Home() {
 
   return (
     <Shell>
+      <SessionBar onReady={setSessionReady} />
+
       <div className="flex justify-end mb-4 text-sm">
         <span className="font-mono text-[var(--ink)]/55 mr-3">
           {shortAddr(address)}

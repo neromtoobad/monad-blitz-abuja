@@ -24,6 +24,7 @@ import {
 } from "@/lib/whot";
 import { formatEther, parseEventLogs } from "viem";
 import { HOUSE_LABEL, isSoloTable, recallWager } from "@/lib/solo";
+import { sessionAddress, sessionSend } from "@/lib/session";
 
 // Blocks are ~400ms, so poll fast enough that the table feels live.
 const POLL = { refetchInterval: 800 } as const;
@@ -31,8 +32,17 @@ const POLL = { refetchInterval: 800 } as const;
 type Move = { house: boolean; text: string; effect: number; left: number };
 
 export function Table({ gameId }: { gameId: bigint }) {
-  const { address } = useAccount();
-  const { writeContract, isPending, data: txHash } = useWriteContract();
+  const { address: eoa } = useAccount();
+  // Moves are signed by the session wallet, so it is the player as far as the
+  // contract is concerned. The connected wallet only funds it.
+  const [address, setAddress] = useState<`0x${string}` | null>(null);
+  const [txHash, setTxHash] = useState<`0x${string}` | undefined>();
+  const [isPending, setIsPending] = useState(false);
+  const [sendError, setSendError] = useState<string | null>(null);
+
+  useEffect(() => {
+    setAddress(sessionAddress());
+  }, [eoa]);
   const [picked, setPicked] = useState<number | null>(null);
 
   // The house replies inside the player's transaction, so its move never gets
@@ -146,14 +156,21 @@ export function Table({ gameId }: { gameId: bigint }) {
     !!address && g.turnAddress.toLowerCase() === address.toLowerCase();
   const seated = seats.some((s) => s.toLowerCase() === address?.toLowerCase());
 
-  const send = (functionName: string, args: readonly unknown[]) =>
-    writeContract({
-      abi: whotAbi,
-      address: WHOT_ADDRESS,
-      functionName,
-      args,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any);
+  // No wallet popup: the session key signs locally.
+  const send = async (functionName: string, args: readonly unknown[]) => {
+    setIsPending(true);
+    setSendError(null);
+    try {
+      const hash = await sessionSend(WHOT_ADDRESS, whotAbi, functionName, args);
+      setTxHash(hash);
+    } catch (e) {
+      setSendError(
+        (e as Error).message.split("\n")[0].slice(0, 150) || "move failed",
+      );
+    } finally {
+      setIsPending(false);
+    }
+  };
 
   // ------------------------------------------------------------ open table
 
@@ -442,6 +459,10 @@ export function Table({ gameId }: { gameId: bigint }) {
               ))}
             </div>
           </div>
+        )}
+
+        {sendError && (
+          <p className="mb-3 text-sm text-[var(--ink)]">{sendError}</p>
         )}
 
         <div className="flex gap-3">
